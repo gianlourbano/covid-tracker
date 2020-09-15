@@ -1,15 +1,22 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import { ThemeProvider } from 'react-native-elements';
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import { Text, ThemeProvider } from 'react-native-elements'
 
+import { NavigationContainer } from '@react-navigation/native'
 import Main from "./src/pages/Main"
+import About from "./src/pages/About"
 
-// Create the client as outlined in the setup guide
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View } from 'react-native';
+import Country from './src/pages/Main/Country';
+
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 });
+
+const Tab = createBottomTabNavigator();
 
 const theme = {
   colors: {
@@ -18,24 +25,22 @@ const theme = {
   }
 };
 
+
 const App = () => (
   <ThemeProvider theme={theme}>
     <ApolloProvider client={client}>
-      <View style={styles.root}>
-        <Main />
-      </View>
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="Home"
+        >
+          <Tab.Screen name="Country" component={Country} />
+          <Tab.Screen name="Home" component={Main} />
+          <Tab.Screen name="About" component={About} />
+        </Tab.Navigator>
+      </NavigationContainer>
     </ApolloProvider>
   </ThemeProvider>
   
 );
 
-const styles = StyleSheet.create({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  title: {
-    textAlign: 'center',
-  },
-});
 export default App;

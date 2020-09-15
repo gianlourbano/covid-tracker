@@ -3,7 +3,7 @@ import { Image, ImageProps, StyleSheet, Text, View } from "react-native"
 
 interface Props {
     text: string,
-    data?: number, 
+    data?: number | string, 
     secondary?: boolean,
     inverted?: boolean,
     icon?: Readonly<ImageProps> & Readonly<{ children?: ReactNode; }>,

@@ -1,16 +1,17 @@
 import React from "react"
 
-import { View } from "react-native"
+import Content from "./Main/Content"
 
-import Header from "../components/Header"
-import Content from "../components/Content"
+import { createStackNavigator } from '@react-navigation/stack';
+import TotalCases from "./Main/TotalCases";
+const HomeStack = createStackNavigator();
 
 const Main: React.FC = () => {
     return(
-        <View>
-            <Header />
-            <Content />
-        </View>
+        <HomeStack.Navigator>
+            <HomeStack.Screen name="Home" component={Content} />
+            <HomeStack.Screen name="TotalCases" component={TotalCases} />
+        </HomeStack.Navigator>
     )
 }
 
