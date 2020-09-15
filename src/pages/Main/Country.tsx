@@ -38,7 +38,7 @@ const Country: React.FC = () => {
     }, [])
 
    return(
-        <View>
+        <View style={styles.root}>
             {data && (
                 <ScrollView>
                     <Text style={styles.title}>Italy - IT</Text>
@@ -48,9 +48,10 @@ const Country: React.FC = () => {
                     <ContentBlock data={numberWithSpaces(data[1].Recovered)} text="Total Recovered" inverted icon={novirus}/>
                     <Text style={styles.title}>Daily</Text>
                     <ContentBlock data={numberWithSpaces(data[1].Active - data[0].Active)} text="New Active Cases" secondary icon={mask} />
-                   <ContentBlock data={numberWithSpaces(data[1].Confirmed - data[0].Confirmed)} text="New Confirmed Cases" inverted icon={virus} />
-                   <ContentBlock data={numberWithSpaces(data[1].Deaths - data[0].Deaths)} text="New Deaths" secondary icon={death} />
-                   <ContentBlock data={numberWithSpaces(data[1].Recovered - data[0].Recovered)} text="New Recovered" inverted icon={novirus} />
+                    <ContentBlock data={numberWithSpaces(data[1].Confirmed - data[0].Confirmed)} text="New Confirmed Cases" inverted icon={virus} />
+                    <ContentBlock data={numberWithSpaces(data[1].Deaths - data[0].Deaths)} text="New Deaths" secondary icon={death} />
+                    <ContentBlock data={numberWithSpaces(data[1].Recovered - data[0].Recovered)} text="New Recovered" inverted icon={novirus} />
+                    <Text style={[styles.title, {fontSize: 20}]}>Last Updaded on {data[1].Date}</Text>
                 </ScrollView>
             )}
         </View>
@@ -62,6 +63,12 @@ const styles = StyleSheet.create({
         color: "#57596F",
         textAlign: "center",
         fontSize: 35
+    },
+    root: {
+        flexGrow: 1,
+        padding: 20,
+        display: "flex",
+        alignItems: "stretch",
     }
 })
 

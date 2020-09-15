@@ -62,10 +62,6 @@ const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
                         data: data
                     })}}
                 />
-                <Button
-                    title="Refresh"
-                    type="clear"
-                />
             </View>
             <Text style={[styles.title, { fontSize: 20, flexGrow: 1 }]}>Last updated {date == data?.Date.slice(8, 10) ? "today" : data?.Date.slice(8, 10)} at {data?.Date.slice(11, 19)}</Text>
         </View>

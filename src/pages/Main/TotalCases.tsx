@@ -16,8 +16,8 @@ const TotalCases: React.FC<{route: any}> = ({ route }) => {
     return(
         <View>
             <ContentBlock text="Total Confirmed Cases" data={numberWithSpaces(data?.Global.TotalConfirmed)} inverted secondary icon={virus}/>
-            <ContentBlock text="Total Confirmed Cases" data={numberWithSpaces(data?.Global.TotalDeaths)} icon={death}/>
-            <ContentBlock text="Total Confirmed Cases" data={numberWithSpaces(data?.Global.TotalRecovered)} inverted secondary icon={mask}/>
+            <ContentBlock text="Total Confirmed Deaths" data={numberWithSpaces(data?.Global.TotalDeaths)} icon={death}/>
+            <ContentBlock text="Total Confirmed Recovered" data={numberWithSpaces(data?.Global.TotalRecovered)} inverted secondary icon={mask}/>
         </View>
     )
 }
