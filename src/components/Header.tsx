@@ -1,21 +1,35 @@
 import React from "react"
-import { View, Text, StyleSheet } from "react-native"
+import { View, StyleSheet } from "react-native"
+
+import { Button } from "react-native-elements"
 
 const Header: React.FC = () => {
     return(
         <View style={styles.root}>
-            <Text style={styles.title}>Header</Text>
+            <Button
+                title="Country"
+                type="clear"
+            />
+            <Button
+                title="Homepage"
+                type="clear"
+            />
+            <Button
+                title="About"
+                type="clear"
+            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     root: {
+        paddingTop: 10,
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-        height: 100,
-        backgroundColor: "#63c5da"
+        flexDirection: "row",
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        height: 60,
     },
     title: {
         textAlign: 'center',
