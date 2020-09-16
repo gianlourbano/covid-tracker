@@ -4,7 +4,6 @@ import { ThemeProvider } from 'react-native-elements'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { BottomMenu } from "./src/components/BottomMenu" 
-import { SafeAreaProvider } from 'react-native-safe-area-context' 
 
 const theme = {
   colors: {
@@ -16,9 +15,7 @@ const theme = {
 const App = () => (
   <ThemeProvider theme={theme}>
       <NavigationContainer>
-      <SafeAreaProvider>
         <BottomMenu />
-      </SafeAreaProvider>
       </NavigationContainer>
   </ThemeProvider>
   
