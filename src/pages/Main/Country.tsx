@@ -66,9 +66,11 @@ const styles = StyleSheet.create({
     },
     root: {
         flexGrow: 1,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 20,
         display: "flex",
         alignItems: "stretch",
+        marginBottom: 60,
     }
 })
 

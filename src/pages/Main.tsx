@@ -9,8 +9,8 @@ const HomeStack = createStackNavigator();
 const Main: React.FC = () => {
     return(
         <HomeStack.Navigator>
-            <HomeStack.Screen name="Home" component={Content} />
-            <HomeStack.Screen name="TotalCases" component={TotalCases} />
+            <HomeStack.Screen options={{ headerShown: false }} name="Home" component={Content} />
+            <HomeStack.Screen name="More Info" component={TotalCases} />
         </HomeStack.Navigator>
     )
 }

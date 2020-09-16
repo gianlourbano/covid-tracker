@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { View } from "react-native"
 
 const virus = require("../../assets/virus.png")
@@ -15,9 +15,9 @@ const TotalCases: React.FC<{route: any}> = ({ route }) => {
 
     return(
         <View>
-            <ContentBlock text="Total Confirmed Cases" data={numberWithSpaces(data?.Global.TotalConfirmed)} inverted secondary icon={virus}/>
-            <ContentBlock text="Total Confirmed Deaths" data={numberWithSpaces(data?.Global.TotalDeaths)} icon={death}/>
-            <ContentBlock text="Total Confirmed Recovered" data={numberWithSpaces(data?.Global.TotalRecovered)} inverted secondary icon={mask}/>
+            <ContentBlock text="Mild Condition Active Cases" data={numberWithSpaces(data.data.mild_condition_active_cases)} inverted secondary icon={mask}/>
+            <ContentBlock text="Critical Condition Active Cases" data={numberWithSpaces(data.data.critical_condition_active_cases)} icon={virus}/>
+            <ContentBlock text="General Death Rate" data={numberWithSpaces(data.data.general_death_rate)} inverted secondary icon={death}/>
         </View>
     )
 }

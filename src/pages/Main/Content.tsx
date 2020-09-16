@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Alert, StyleSheet, Text, View } from "react-native"
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Button } from "react-native-elements"
 import ContentBlock from "../../components/ContentBlock"
 
@@ -8,15 +8,32 @@ const death = require("../../assets/death.png")
 const mask = require("../../assets/mask.png")
 
 export interface SummaryData {
-    Global: {
-        NewConfirmed: number,
-        TotalConfirmed: number,
-        NewDeaths: number,
-        TotalDeaths: number,
-        NewRecovered: number,
-        TotalRecovered: number,
+    NewConfirmed: number,
+    TotalConfirmed: number,
+    NewDeaths: number,
+    TotalDeaths: number,
+    NewRecovered: number,
+    TotalRecovered: number,
+}
+
+interface CovidData {
+    data: {
+        total_cases: number,
+        recovery_cases: number,
+        death_cases: number,
+        last_update: string,
+        currently_infected: number,
+        cases_with_outcome: number,
+        mild_condition_active_cases: number,
+        critical_condition_active_cases: number,
+        recovered_closed_cases: number,
+        death_closed_cases: number,
+        closed_cases_recovered_percentage: number,
+        closed_cases_death_percentage: number,
+        active_cases_mild_percentage: number,
+        active_cases_critical_percentage: number,
+        general_death_rate: number
     },
-    Date: string
 }
 
 export function numberWithSpaces(x: number) {
@@ -25,45 +42,62 @@ export function numberWithSpaces(x: number) {
 
 const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
 
-    const [data, setData] = useState <SummaryData>()
+    const [data, setData] = useState<CovidData>()
     const [loading, setLoading] = useState(false)
 
-    var date = new Date().getDate() as unknown as string
-
     useEffect(() => {
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
+
+        var date = new Date().getDate()
+        var month = new Date().getMonth() + 1
+        var year = new Date().getFullYear()
+
+        var yesterday = month < 10 ? `${year}-0${month}-${date - 1}` : `${year}-${month}-${date - 1}`
+        var today = month < 10 ? `${year}-0${month}-${date}` : `${year}-${month}-${date}`
 
         setLoading(true)
-        fetch("https://api.covid19api.com/summary", requestOptions)
-            .then(response => response.json())
-            .then(result => { setData(result); setLoading(false)})
-            .catch(error => Alert.alert("Error while fetching data!" + error))
+
+        fetch("https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats")
+            .then(result => result.json())
+            .then(response => {
+                setData(response)
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }, [])
 
     return(
         <View>
-            <View style={styles.root}>
-                <Text style={styles.title}>COVID-19 Daily update</Text>
-                {data && (
-                    <>
-                        <ContentBlock text="Daily New Cases" data={numberWithSpaces(data?.Global.NewConfirmed)} icon={virus} />
-                        <ContentBlock text="Daily New Deaths" data={numberWithSpaces(data?.Global.NewDeaths)} icon={death} secondary inverted />
-                        <ContentBlock text="Daily New Recovered" data={numberWithSpaces(data?.Global.NewRecovered)} icon={mask} />
-                    </>
-                )}
-            </View>
-            <View style={styles.actions}>
-                <Button
-                    title="Total Cases"
-                    onPress={() => {navigation.navigate("TotalCases", {
-                        data: data
-                    })}}
-                />
-            </View>
-            <Text style={[styles.title, { fontSize: 20, flexGrow: 1 }]}>Last updated {date == data?.Date.slice(8, 10) ? "today" : data?.Date.slice(8, 10)} at {data?.Date.slice(11, 19)}</Text>
+            <ScrollView>
+                <View style={styles.root}>
+                    <Text style={styles.title}>COVID-19 Summary</Text>
+                    {data && (
+                        <>
+                            <ContentBlock text="Total Cases" data={numberWithSpaces(data.data.total_cases)} icon={virus} />
+                            <ContentBlock text="Total Deaths" data={numberWithSpaces(data.data.death_cases)} icon={death} secondary inverted />
+                            <ContentBlock text="Total Recovered" data={numberWithSpaces(data.data.recovered_closed_cases)} icon={mask} />
+                            
+                        </>
+                    )}
+                </View>
+                <View style={styles.actions}>
+                    <Button
+                        containerStyle={styles.button}
+                        title="More Info"
+                        onPress={() => {
+                            navigation.navigate("More Info", {
+                                data: data
+                            })
+                            
+                        }}
+                    />
+                    <Button
+                        containerStyle={styles.button}
+                        title="Daily"
+                    />
+                </View>
+                <Text style={[styles.title, { fontSize: 25 }]}>{data?.data.last_update}</Text>
+            </ScrollView>
         </View>
     )
 }
@@ -71,7 +105,8 @@ const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
 const styles = StyleSheet.create({
     root: {
         flexGrow: 1,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 20,
         display: "flex",
         alignItems: "stretch",
     },
@@ -84,10 +119,17 @@ const styles = StyleSheet.create({
         marginTop: 40
     },
     actions: {
+        display: "flex",
+        marginVertical: 40,
         flexDirection: "row",
         justifyContent: "space-evenly",
-        marginBottom: 20,
-    }
+    },
+    button: {
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: 0,
+        marginHorizontal: 20,
+    },
 });
 
 export default Content
