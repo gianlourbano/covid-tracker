@@ -4,6 +4,9 @@ import { ThemeProvider } from 'react-native-elements'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { BottomMenu } from "./src/components/BottomMenu" 
+import { QueryCache, ReactQueryCacheProvider } from 'react-query'
+
+const queryCache = new QueryCache()
 
 const theme = {
   colors: {
@@ -13,11 +16,14 @@ const theme = {
 } 
 
 const App = () => (
-  <ThemeProvider theme={theme}>
+  <ReactQueryCacheProvider queryCache={queryCache}>
+    <ThemeProvider theme={theme}>
       <NavigationContainer>
         <BottomMenu />
       </NavigationContainer>
-  </ThemeProvider>
+    </ThemeProvider>
+  </ReactQueryCacheProvider>
+  
   
 ) 
 

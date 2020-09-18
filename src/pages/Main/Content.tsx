@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native"
+import React from "react"
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Button } from "react-native-elements"
+import { useQuery } from "react-query"
 import ContentBlock from "../../components/ContentBlock"
 
 const virus = require("../../assets/virus.png")
@@ -16,69 +17,30 @@ export interface SummaryData {
     TotalRecovered: number,
 }
 
-interface CovidData {
-    data: {
-        total_cases: number,
-        recovery_cases: number,
-        death_cases: number,
-        last_update: string,
-        currently_infected: number,
-        cases_with_outcome: number,
-        mild_condition_active_cases: number,
-        critical_condition_active_cases: number,
-        recovered_closed_cases: number,
-        death_closed_cases: number,
-        closed_cases_recovered_percentage: number,
-        closed_cases_death_percentage: number,
-        active_cases_mild_percentage: number,
-        active_cases_critical_percentage: number,
-        general_death_rate: number
-    },
-}
-
 export function numberWithSpaces(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
 
-    const [data, setData] = useState<CovidData>()
-    const [loading, setLoading] = useState(false)
-
-    useEffect(() => {
-
-        var date = new Date().getDate()
-        var month = new Date().getMonth() + 1
-        var year = new Date().getFullYear()
-
-        var yesterday = month < 10 ? `${year}-0${month}-${date - 1}` : `${year}-${month}-${date - 1}`
-        var today = month < 10 ? `${year}-0${month}-${date}` : `${year}-${month}-${date}`
-
-        setLoading(true)
-
-        fetch("https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats")
+    const { data, isFetching, refetch } = useQuery("covid", () => {
+        return fetch("https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats")
             .then(result => result.json())
-            .then(response => {
-                setData(response)
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, [])
+    })
 
     return(
         <View>
             <ScrollView>
                 <View style={styles.root}>
                     <Text style={styles.title}>COVID-19 Summary</Text>
-                    {data && (
+                    <ActivityIndicator size="large" animating={isFetching}/>
+                    {data && !isFetching && (
                         <>
-                            <ContentBlock text="Total Cases" data={numberWithSpaces(data.data.total_cases)} icon={virus} />
-                            <ContentBlock text="Total Deaths" data={numberWithSpaces(data.data.death_cases)} icon={death} secondary inverted />
-                            <ContentBlock text="Total Recovered" data={numberWithSpaces(data.data.recovered_closed_cases)} icon={mask} />
-                            
+                            <ContentBlock text="Total Cases" data={numberWithSpaces(data?.data.total_cases)} icon={virus} />
+                            <ContentBlock text="Total Deaths" data={numberWithSpaces(data?.data.death_cases)} icon={death} secondary inverted />
+                            <ContentBlock text="Total Recovered" data={numberWithSpaces(data?.data.recovered_closed_cases)} icon={mask} />
                         </>
-                    )}
+                    )}  
                 </View>
                 <View style={styles.actions}>
                     <Button
@@ -91,9 +53,16 @@ const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
                             
                         }}
                     />
+                    <Button 
+                        containerStyle={styles.button}
+                        buttonStyle={{ backgroundColor: "#DD76A2"}}
+                        onPress={() => refetch()}
+                        title="Update"
+                    />
                     <Button
                         containerStyle={styles.button}
                         title="Daily"
+                        disabled
                     />
                 </View>
                 <Text style={[styles.title, { fontSize: 25 }]}>{data?.data.last_update}</Text>

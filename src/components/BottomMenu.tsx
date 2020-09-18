@@ -2,7 +2,7 @@ import React from "react"
 import { TabBar } from "./TabBar" 
 
 import Main from "../pages/Main"
-import About from "../pages/About"
+import World from "../pages/World"
 import Country from '../pages/Main/Country' 
 
 import { View } from "react-native" 
@@ -21,7 +21,7 @@ export const BottomMenu = () => {
             >
                 <Tab.Screen name="globe-europe" component={Country} />
                 <Tab.Screen name="home" component={Main} />
-                <Tab.Screen name="globe" component={About} />
+                <Tab.Screen name="globe" component={World} />
             </Tab.Navigator>
             
                 <View
