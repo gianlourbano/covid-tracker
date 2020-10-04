@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react"
 import { Image, ImageProps, StyleSheet, Text, View } from "react-native"
 
+import * as Animatable from 'react-native-animatable';
+
 interface Props {
     text: string,
     data?: number | string, 
@@ -11,13 +13,19 @@ interface Props {
 
 const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted}) => {
     return(
-        <View style={[styles.summary, (secondary ? styles.pink : styles.blue), (inverted && styles.inverted)]}>
+        <Animatable.View animation={inverted ? "fadeInLeft" : "fadeInRight"}
+                        useNativeDriver
+                        style={[
+                            styles.summary, 
+                            (secondary ? styles.pink : styles.blue), 
+                            (inverted && styles.inverted)
+                            ]}>
             <View style={styles.secondaryContent}>
                 <Text style={styles.text}>{text}</Text>
                 <Text style={styles.text}>{data}</Text>
             </View>
             {icon && <Image source={icon} style={styles.image} />}
-        </View>
+        </Animatable.View>
     )
 }
 
