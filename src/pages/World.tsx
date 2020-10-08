@@ -83,7 +83,7 @@ const World: React.FC = () => {
           <ContentBlock data={numberWithSpaces(data[1].Recovered - data[0].Recovered)} text="New Recovered" inverted icon={novirus} />
           <Text style={[styles.title, { fontSize: 20 }]}>Last Updaded on {data[1].Date}</Text>
         </ScrollView>
-      )}
+      )} 
     </View>
   )
 }
