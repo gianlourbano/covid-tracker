@@ -5,7 +5,6 @@ import { useQuery } from "react-query"
 import ContentBlock from "../../components/ContentBlock"
 import axios from "axios"
 import * as Animatable from 'react-native-animatable';
-import { SafeAreaView } from "react-native-safe-area-context"
 
 
 const virus = require("../../assets/virus.png")
@@ -57,6 +56,7 @@ const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
                             <ContentBlock text="Total Deaths" data={data[0].total_deaths} icon={death} secondary inverted loading={isFetching}/>
                             <ContentBlock text="Total Recovered" data={data[0].total_recovered} icon={mask} loading={isFetching}/>
                             <ContentBlock text="New Cases" data={data[0].new_cases} inverted secondary icon={virus} loading={isFetching}/>
+                            <ContentBlock text="New Deaths" data={data[0].new_deaths} icon={death} loading={isFetching}/>
                             <ContentBlock text="New Deaths" data={data[0].new_deaths} icon={death} loading={isFetching}/>
                         </>
                     )}  
