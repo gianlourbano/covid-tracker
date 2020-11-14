@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react"
-import { ScrollView, StyleSheet, Text, View } from "react-native"
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
 import { Button } from "react-native-elements"
 import { useQuery } from "react-query"
 import ContentBlock from "../../components/ContentBlock"
 import axios from "axios"
 import * as Animatable from 'react-native-animatable';
+import { SafeAreaView } from "react-native-safe-area-context"
 
 
 const virus = require("../../assets/virus.png")
@@ -29,6 +30,8 @@ export function numberWithSpaces(x: number) {
 
 const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
 
+    const [refreshing, setRefreshing] = useState(false);
+
     const { data, isFetching, refetch } = useQuery("covid", async () => {
         let { data }: { data: Array<SummaryData> } = await axios.get("https://covid19-scraper-utterlabs.herokuapp.com/api/data")
         return(data)
@@ -36,29 +39,28 @@ const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
         refetchOnWindowFocus: "always",
     })
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        refetch().then(() => setRefreshing(false))
+    }, []);
+
     return(
-        <View style={{marginBottom: 60}}>
+        <View style={{marginBottom: 130}}>
             <Text style={styles.title}>COVID-19 Summary</Text>
-            <ScrollView>
+            <ScrollView refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
                 <View style={styles.root}>
-                    {data && !isFetching && (
+                    {data && (
                         <>
-                            <ContentBlock text="Total Cases" data={data[0].total_cases} icon={virus} />
-                            <ContentBlock text="Total Deaths" data={data[0].total_deaths} icon={death} secondary inverted />
-                            <ContentBlock text="Total Recovered" data={data[0].total_recovered} icon={mask} />
+                            <ContentBlock text="Total Cases" data={data[0].total_cases} icon={virus} loading={isFetching}/>
+                            <ContentBlock text="Total Deaths" data={data[0].total_deaths} icon={death} secondary inverted loading={isFetching}/>
+                            <ContentBlock text="Total Recovered" data={data[0].total_recovered} icon={mask} loading={isFetching}/>
+                            <ContentBlock text="New Cases" data={data[0].new_cases} inverted secondary icon={virus} loading={isFetching}/>
+                            <ContentBlock text="New Deaths" data={data[0].new_deaths} icon={death} loading={isFetching}/>
                         </>
                     )}  
                 </View>
-                {!isFetching && (
-                    <Animatable.View style={styles.actions} animation="bounceIn" duration={2000} delay={500} useNativeDriver>
-                        <StyledButton title="Update"
-                            func={() => refetch()}
-                        />
-                        <StyledButton title="Daily" func={() => navigation.navigate("Daily", {
-                            data: data
-                        })} />
-                    </Animatable.View>
-                )}
             </ScrollView>
         </View>
     )

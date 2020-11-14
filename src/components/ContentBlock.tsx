@@ -2,6 +2,7 @@ import React, { ReactNode } from "react"
 import { Image, ImageProps, StyleSheet, Text, View } from "react-native"
 
 import * as Animatable from 'react-native-animatable';
+import Skeleton from "./Skeleton/Skeleton";
 
 interface Props {
     text: string,
@@ -9,22 +10,39 @@ interface Props {
     secondary?: boolean,
     inverted?: boolean,
     icon?: Readonly<ImageProps> & Readonly<{ children?: ReactNode; }>,
+    loading?: boolean,
 }
 
-const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted}) => {
+const imageDims = 60
+
+const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted, loading}) => {
+    
     return(
-        <Animatable.View animation={inverted ? "fadeInLeft" : "fadeInRight"}
+        <Animatable.View
                         useNativeDriver
                         style={[
-                            styles.summary, 
-                            (secondary ? styles.pink : styles.blue), 
-                            (inverted && styles.inverted)
+                            styles.summary,
+                            (!loading && styles.summaryNotLoading), 
+                            (secondary ? styles.pink : styles.blue),
+                            (inverted && !loading && styles.inverted)
                             ]}>
-            <View style={styles.secondaryContent}>
-                <Text style={styles.text}>{text}</Text>
-                <Text style={styles.text}>{data}</Text>
-            </View>
-            {icon && <Image source={icon} style={styles.image} />}
+            {loading ? 
+                <View style={[styles.skeleton, (inverted &&  styles.inverted)]}>
+                    <View>
+                        <Skeleton width={130} />
+                        <Skeleton width={100} />
+                    </View>
+                    <Skeleton width={imageDims} height={imageDims} />
+                </View>
+                : 
+                <>
+                    <View style={styles.secondaryContent}>
+                        <Animatable.Text animation="bounceIn" style={styles.text}>{text}</Animatable.Text>
+                        <Animatable.Text animation="bounceIn" style={styles.text}>{data}</Animatable.Text>
+                    </View>
+                    {icon && <Animatable.Image animation="bounceIn" source={icon} style={styles.image} />}
+                </>
+                }
         </Animatable.View>
     )
 }
@@ -33,10 +51,10 @@ const styles = StyleSheet.create({
     summary: {
         margin: 10,
         borderRadius: 20,
+    },
+    summaryNotLoading: {
         padding: 20,
-        display: "flex",
         flexDirection: "row",
-        maxHeight: 100,
         justifyContent: "space-evenly"
     },
     text: {
@@ -47,15 +65,25 @@ const styles = StyleSheet.create({
     blue: { backgroundColor: "#7884BF" },
     image: {
         alignSelf: "flex-end",
-        width: 60,
-        height: 60,
+        width: imageDims,
+        height: imageDims,
     },
     secondaryContent: {
-        display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
     },
     inverted: {
-        flexDirection: "row-reverse"
+        flexDirection: "row-reverse",
+    },
+    skeleton: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        margin: 10,
+        alignItems: "center",
+        paddingLeft: 10,
+        paddingBottom: 10,
+        paddingRight: 10,
+        borderRadius: 10,
+        opacity: 0.7,
     }
 });
 
