@@ -11,14 +11,16 @@ interface Props {
     inverted?: boolean,
     icon?: Readonly<ImageProps> & Readonly<{ children?: ReactNode; }>,
     loading?: boolean,
+    main?: boolean
 }
 
 const imageDims = 60
 
-const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted, loading}) => {
-    
+const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted, loading, main}) => {
     return(
         <Animatable.View
+                        animation="bounceIn"
+                        duration={500}
                         useNativeDriver
                         style={[
                             styles.summary,
@@ -37,10 +39,10 @@ const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted, 
                 : 
                 <>
                     <View style={styles.secondaryContent}>
-                        <Animatable.Text animation="bounceIn" style={styles.text}>{text}</Animatable.Text>
-                        <Animatable.Text animation="bounceIn" style={styles.text}>{data}</Animatable.Text>
+                        <Animatable.Text animation="bounceIn" delay={!main ? 300 : 0} style={styles.text}>{text}</Animatable.Text>
+                        <Animatable.Text animation="bounceIn" delay={!main ? 300 : 0} style={styles.text}>{data}</Animatable.Text>
                     </View>
-                    {icon && <Animatable.Image animation="bounceIn" source={icon} style={styles.image} />}
+                    {icon && <Animatable.Image animation="bounceIn" delay={!main ? 300 : 0} source={icon} style={styles.image} />}
                 </>
                 }
         </Animatable.View>

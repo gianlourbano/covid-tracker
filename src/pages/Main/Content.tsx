@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
-import { Button } from "react-native-elements"
 import { useQuery } from "react-query"
 import ContentBlock from "../../components/ContentBlock"
 import axios from "axios"
-import * as Animatable from 'react-native-animatable';
 
 
 const virus = require("../../assets/virus.png")
@@ -27,7 +25,7 @@ export function numberWithSpaces(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
-const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
+const Content: React.FC = () => {
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -50,29 +48,14 @@ const Content: React.FC<{ navigation: any}> = ({ navigation }) => {
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
                 <View style={styles.root}>
-                    {data && (
-                        <>
-                            <ContentBlock text="Total Cases" data={data[0].total_cases} icon={virus} loading={isFetching}/>
-                            <ContentBlock text="Total Deaths" data={data[0].total_deaths} icon={death} secondary inverted loading={isFetching}/>
-                            <ContentBlock text="Total Recovered" data={data[0].total_recovered} icon={mask} loading={isFetching}/>
-                            <ContentBlock text="New Cases" data={data[0].new_cases} inverted secondary icon={virus} loading={isFetching}/>
-                            <ContentBlock text="New Deaths" data={data[0].new_deaths} icon={death} loading={isFetching}/>
-                            <ContentBlock text="New Deaths" data={data[0].new_deaths} icon={death} loading={isFetching}/>
-                        </>
-                    )}  
+                    <ContentBlock text="Total Cases" data={data && data[0].total_cases} icon={virus} loading={isFetching} main/>
+                    <ContentBlock text="Total Deaths" data={data && data[0].total_deaths} icon={death} secondary inverted loading={isFetching} main/>
+                    <ContentBlock text="Total Recovered" data={data && data[0].total_recovered} icon={mask} loading={isFetching} main/>
+                    <ContentBlock text="New Cases" data={data && data[0].new_cases} inverted secondary icon={virus} loading={isFetching} main/>
+                    <ContentBlock text="New Deaths" data={data && data[0].new_deaths} icon={death} loading={isFetching} main/>
                 </View>
             </ScrollView>
         </View>
-    )
-}
-
-const StyledButton: React.FC<{func: () =>{}, title: string}> = ({func, title}) => {
-    return(
-        <Button
-            containerStyle={styles.button}
-            onPress={func}
-            title={title}
-        />
     )
 }
 
@@ -91,17 +74,6 @@ const styles = StyleSheet.create({
     },
     date: {
         marginTop: 40
-    },
-    actions: {
-        marginVertical: 40,
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-    },
-    button: {
-        flexGrow: 1,
-        flexShrink: 1,
-        flexBasis: 0,
-        marginHorizontal: 20,
     },
 });
 
