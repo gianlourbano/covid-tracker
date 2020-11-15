@@ -1,9 +1,9 @@
 import React from "react" 
 import { TabBar } from "./TabBar" 
 
-import Main from "../pages/Main"
-import World from "../pages/World"
-import Country from '../pages/Main/Country' 
+import Main from "../../pages/Main/Main"
+import World from "../../pages/World/World"
+import Country from '../../pages/Main/Country' 
 
 import { View } from "react-native" 
 import { createMaterialTopTabNavigator, MaterialTopTabBarProps } from "@react-navigation/material-top-tabs" 

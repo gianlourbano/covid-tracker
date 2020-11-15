@@ -3,14 +3,14 @@ import { ActivityIndicator, StyleSheet, Text, View, ScrollView } from "react-nat
 import { Button, Input, Overlay } from "react-native-elements"
 import { useQuery } from "react-query"
 import axios from "axios"
-import ContentBlock from "../components/ContentBlock"
-import { numberWithSpaces } from "./Main/Content"
+import ContentBlock from "../../components/ContentBlock"
+import { numberWithSpaces } from "../Main/Content"
 
 
-const virus = require("../assets/virus.png")
-const death = require("../assets/death.png")
-const mask = require("../assets/mask.png")
-const novirus = require("../assets/no-virus.png")
+const virus = require("../../assets/virus.png")
+const death = require("../../assets/death.png")
+const mask = require("../../assets/mask.png")
+const novirus = require("../../assets/no-virus.png")
 
 interface Response {
   Country: string,

@@ -3,7 +3,7 @@ import React from 'react'
 import { ThemeProvider } from 'react-native-elements'
 
 import { NavigationContainer } from '@react-navigation/native'
-import { BottomMenu } from "./src/components/BottomMenu" 
+import { BottomMenu } from "./src/components/BottomNavigator/BottomMenu" 
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 
 const queryCache = new QueryCache()

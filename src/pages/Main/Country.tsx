@@ -41,7 +41,6 @@ const Country: React.FC = () => {
         <View style={styles.root}>
             {data && (
                 <ScrollView>
-
                     <Text style={styles.title}>Italy - IT</Text>
                     <ContentBlock data={numberWithSpaces(data[1].Active)} text="Active Cases" secondary icon={mask} />
                     <ContentBlock data={numberWithSpaces(data[1].Confirmed)} text="Total Confirmed Cases" inverted icon={virus} />
