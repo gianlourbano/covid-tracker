@@ -13,7 +13,7 @@
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.8.0",
-    "@react-navigation/material-top-tabs": "^5.2.16",
+    "@react-navigation/material-top-tabs": "^5.3.10",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
     "axios": "^0.20.0",
@@ -25,7 +25,7 @@
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.7",
     "react-native-screens": "^2.10.1",
-    "react-native-tab-view": "^2.15.1",
+    "react-native-tab-view": "^2.15.2",
     "react-native-vector-icons": "^7.1.0",
     "react-navigation-custom-bottom-tab-component": "^1.1.1",
     "react-query": "^2.20.1"
