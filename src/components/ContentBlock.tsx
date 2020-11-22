@@ -11,38 +11,52 @@ interface Props {
     inverted?: boolean,
     icon?: Readonly<ImageProps> & Readonly<{ children?: ReactNode; }>,
     loading?: boolean,
-    main?: boolean
+    main?: boolean,
+    shrink?: boolean,
+    noAnim?: boolean
 }
 
 const imageDims = 60
 
-const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted, loading, main}) => {
+const ContentBlock: React.FC<Props> = ({ text, data, secondary, icon, inverted, loading, main, shrink, noAnim}) => {
     return(
         <Animatable.View
-                        animation="bounceIn"
+                        animation={!noAnim ? "bounceIn" : ""}
                         duration={500}
                         useNativeDriver
                         style={[
                             styles.summary,
                             (!loading && styles.summaryNotLoading), 
                             (secondary ? styles.pink : styles.blue),
-                            (inverted && !loading && styles.inverted)
+                            (inverted && !loading && styles.inverted),
+                            (shrink && {flexShrink: 1})
                             ]}>
             {loading ? 
                 <View style={[styles.skeleton, (inverted &&  styles.inverted)]}>
-                    <View>
-                        <Skeleton width={130} />
-                        <Skeleton width={100} />
-                    </View>
-                    <Skeleton width={imageDims} height={imageDims} />
+                    {icon ? 
+                        <>
+                            <View>
+                                <Skeleton width={130} />
+                                <Skeleton width={100} />
+                            </View>
+                            <Skeleton width={imageDims} height={imageDims} />
+                        </> 
+                        : 
+                        <>
+                            <View style={{flexGrow: 1}}>
+                                <Skeleton width="80%" />
+                                <Skeleton width="60%" />
+                            </View>
+                        </> 
+                    }
                 </View>
                 : 
                 <>
-                    <View style={styles.secondaryContent}>
-                        <Animatable.Text animation="bounceIn" delay={!main ? 300 : 0} style={styles.text}>{text}</Animatable.Text>
-                        <Animatable.Text animation="bounceIn" delay={!main ? 300 : 0} style={styles.text}>{data}</Animatable.Text>
+                    <View>
+                        <Animatable.Text animation={!noAnim ? "bounceIn" : ""} delay={!main ? 300 : 0} style={styles.text}>{text}</Animatable.Text>
+                        <Animatable.Text animation={!noAnim ? "bounceIn" : ""} delay={!main ? 300 : 0} style={styles.text}>{data}</Animatable.Text>
                     </View>
-                    {icon && <Animatable.Image animation="bounceIn" delay={!main ? 300 : 0} source={icon} style={styles.image} />}
+                    {icon && <Animatable.Image animation={!noAnim ? "bounceIn" : ""} delay={!main ? 300 : 0} source={icon} style={styles.image} />}
                 </>
                 }
         </Animatable.View>
@@ -53,6 +67,7 @@ const styles = StyleSheet.create({
     summary: {
         margin: 10,
         borderRadius: 20,
+        flexGrow: 1,
     },
     summaryNotLoading: {
         padding: 20,
@@ -69,9 +84,6 @@ const styles = StyleSheet.create({
         alignSelf: "flex-end",
         width: imageDims,
         height: imageDims,
-    },
-    secondaryContent: {
-        flexDirection: "column",
     },
     inverted: {
         flexDirection: "row-reverse",

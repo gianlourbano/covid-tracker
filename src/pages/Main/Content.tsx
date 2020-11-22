@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from "react"
-import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Alert, Button, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useQuery } from "react-query"
 import ContentBlock from "../../components/ContentBlock"
 import axios from "axios"
-
+import Section from "../../components/Section/Section"
+import Icon from "react-native-vector-icons/FontAwesome5"
 
 const virus = require("../../assets/virus.png")
 const death = require("../../assets/death.png")
@@ -25,7 +26,7 @@ export function numberWithSpaces(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
-const Content: React.FC = () => {
+const Content: React.FC<{navigation: any}> = ({navigation}) => {
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -36,14 +37,28 @@ const Content: React.FC = () => {
         refetchOnWindowFocus: "always",
     })
 
+    const createInfoAlert = () =>
+        Alert.alert(
+            "Info",
+            data && `Data has been updated at ${data[0].time}`,
+            [
+                { text: "OK" }
+            ],
+            { cancelable: true }
+        )
+
     const onRefresh = useCallback(() => {
         setRefreshing(true)
         refetch().then(() => setRefreshing(false))
     }, []);
 
     return(
-        <View style={{marginBottom: 130}}>
-            <Text style={styles.title}>COVID-19 Summary</Text>
+        <View>
+            <View style={styles.title}>
+                <Text style={[styles.text, styles.header]}>COVID-19</Text>
+                <Icon.Button name="info-circle" color="#DD76A2" size={30} backgroundColor="#cdcdd6" onPress={createInfoAlert} />           
+            </View>
+            <Text style={[styles.text, { backgroundColor: "#cdcdd6", paddingBottom: 5 }]}>Coronavirus pandemic</Text>
             <ScrollView refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
@@ -51,9 +66,20 @@ const Content: React.FC = () => {
                     <ContentBlock text="Total Cases" data={data && data[0].total_cases} icon={virus} loading={isFetching} main/>
                     <ContentBlock text="Total Deaths" data={data && data[0].total_deaths} icon={death} secondary inverted loading={isFetching} main/>
                     <ContentBlock text="Total Recovered" data={data && data[0].total_recovered} icon={mask} loading={isFetching} main/>
-                    <ContentBlock text="New Cases" data={data && data[0].new_cases} inverted secondary icon={virus} loading={isFetching} main/>
-                    <ContentBlock text="New Deaths" data={data && data[0].new_deaths} icon={death} loading={isFetching} main/>
                 </View>
+                <Section color="#cdcdd6">
+                    <Text style={styles.text}>Daily</Text>
+                    <Button title="History" onPress={() => navigation.navigate("History")}/>
+                    <View style={{ flexDirection: "row" }}>
+                        <ContentBlock text="New Cases" data={data && data[0].new_cases} secondary loading={isFetching} main />
+                        <ContentBlock text="New Deaths" data={data && data[0].new_deaths} loading={isFetching} main />
+                    </View>
+                    <Text style={styles.text}>Active cases</Text>
+                    <View style={{ flexDirection: "row" }}>
+                        <ContentBlock text="Active Cases" data={data && data[0].active_cases} loading={isFetching} main />
+                        <ContentBlock text="Critical active cases" data={data && data[0].critical_active_cases} loading={isFetching} secondary main shrink/>
+                    </View>
+                </Section>
             </ScrollView>
         </View>
     )
@@ -61,19 +87,24 @@ const Content: React.FC = () => {
 
 const styles = StyleSheet.create({
     root: {
-        flex: 1,
-        flexGrow: 1,
         paddingHorizontal: 20,
         paddingTop: 20,
     },
     title: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#cdcdd6",
+    },
+    header: {
+        flexGrow: 1,
+        textAlign: "auto",
+        marginLeft: 20,
+        marginTop: 5,
+    },
+    text: {
         color: "#57596F",
         textAlign: "center",
         fontSize: 35,
-        marginTop: 22,
-    },
-    date: {
-        marginTop: 40
     },
 });
 
