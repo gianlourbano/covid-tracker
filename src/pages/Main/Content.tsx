@@ -69,7 +69,9 @@ const Content: React.FC<{navigation: any}> = ({navigation}) => {
                 </View>
                 <Section color="#cdcdd6">
                     <Text style={styles.text}>Daily</Text>
-                    <Button title="History" onPress={() => navigation.navigate("History")}/>
+                    <Button title="History" onPress={() => navigation.navigate("History", {
+                        data: data
+                    })}/>
                     <View style={{ flexDirection: "row" }}>
                         <ContentBlock text="New Cases" data={data && data[0].new_cases} secondary loading={isFetching} main />
                         <ContentBlock text="New Deaths" data={data && data[0].new_deaths} loading={isFetching} main />
