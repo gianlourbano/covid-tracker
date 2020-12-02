@@ -18,8 +18,7 @@ interface Response {
   Deaths: number,
   Recovered: number,
   Active: number,
-  Date: string
-
+  Date: string,
 }
 
 const World: React.FC = () => {

@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from "react"
-import { Alert, Button, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Alert, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native"
 import { useQuery } from "react-query"
 import ContentBlock from "../../components/ContentBlock"
 import axios from "axios"
 import Section from "../../components/Section/Section"
 import Icon from "react-native-vector-icons/FontAwesome5"
+import { Button } from "react-native-elements"
 
 const virus = require("../../assets/virus.png")
 const death = require("../../assets/death.png")
@@ -69,7 +70,9 @@ const Content: React.FC<{navigation: any}> = ({navigation}) => {
                 </View>
                 <Section color="#cdcdd6">
                     <Text style={styles.text}>Daily</Text>
-                    <Button title="History" onPress={() => navigation.navigate("History", {
+                    <Button title="History"
+                            buttonStyle={styles.history}
+                            onPress={() => navigation.navigate("History", {
                         data: data
                     })}/>
                     <View style={{ flexDirection: "row" }}>
@@ -108,6 +111,10 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 35,
     },
+    history: {
+        borderRadius: 20,
+        marginVertical: 5,
+    }
 });
 
 export default Content
